@@ -1,0 +1,356 @@
+<?php require("../../log.php"); ?>
+<?php
+if ( stristr($_SERVER["HTTP_ACCEPT"],"application/xhtml+xml")) {
+  header("Content-type: application/xhtml+xml");
+}
+else {
+  header("Content-type: text/html");
+}
+print "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="application/xml; charset=utf-8" />
+
+<style type="text/css">
+/* <![CDATA[ */
+
+html, body { padding: 0; margin: 0; width: 100%; height: 100%; }
+body { background-color: black; color: white; }
+html, body, table, button { font-family: monospace; font-size: 8pt; }
+a { text-decoration: none; color: #445566; font-weight: bolder; }
+a:hover { text-decoration: underline; }
+#divOut { width: 100%; height: 100%; text-align: center; }
+#bigPic { }
+#tblImages { width: 100%; padding: 0 10px; }
+#tblImages tr { }
+#tblImages tr td { background-color: #051015; height: 120px; width: 25%; text-align: center; }
+#tblImages tr td a { height: 100%; width: 100%; padding: 10px 0; }
+#tblImages tr td a img { outline: none; border: none;}
+#btnPause, #btnCont { font-weight: bolder; }
+
+/* ]]> */
+</style>
+
+<!--[if lte IE 7]>
+
+<style type="text/css">
+</style>
+
+<![endif]-->
+
+<script type="text/javascript">
+/* <![CDATA[ */
+
+var total = 0;
+var slide = 0;
+var timer;
+var xmlDoc;
+var picsdir = "selfies-2014";
+
+window.onload = start;
+
+function $(elem)
+{
+	return document.getElementById(elem);
+}
+
+function addText(elem, txt)
+{
+	elem.appendChild(document.createTextNode(txt));
+}
+
+function clearChilds(elem)
+{
+	while (elem.hasChildNodes()) elem.removeChild(elem.firstChild);
+}
+
+function addBr(elem, num)
+{
+	if (!num) num = 1;
+	for (var i = 0; i < num; i++)
+	{
+		var br = document.createElement("br");
+		elem.appendChild(br);
+	}
+}
+
+function getQueryItem(key)
+{
+	var pat = new RegExp("^\\?" + key + "=([^&]*)");
+	var matches = pat.exec(location.search);
+	
+	if (!matches)
+	{
+		pat = new RegExp("&" + key + "=([^&]*)");
+		matches = pat.exec(location.search);
+	}
+	
+	if (matches) return matches[1];
+	else return null;
+}
+
+function start()
+{
+	if (getQueryItem("go") == "yes")
+	{
+		getXml(startShow);
+	}
+	else if (location.search != "")
+	{
+		location.replace(location.pathname);
+	}
+	else
+	{
+		getXml(loadPics);
+	}
+}
+
+function startShow(xml)
+{
+	xmlDoc = xml;
+	var fnames = xmlDoc.getElementsByTagName("file");
+	var interval = getQueryItem("interval");
+	var repeat = getQueryItem("repeat");
+	
+	slide = getQueryItem("start");
+	total = fnames.length;
+	
+	if (!interval || !slide || isNaN(interval) || isNaN(slide) ||
+		parseInt(slide) >= total || parseInt(interval) < 1000 ||
+		(repeat != null && repeat != "yes" && repeat != "no"))
+	{
+		location.replace(location.pathname + "?go=yes&start=0&interval=5000&repeat=no");
+		return false;
+	}
+	
+	showNext(interval);
+}
+
+function showNext(interval)
+{
+	if (slide < total)
+	{
+		var fnames = xmlDoc.getElementsByTagName("file");
+		var fname = escape(fnames.item(slide).firstChild.data);
+		var divOut = $("divOut");
+		var pic = new Image();
+		var ptot = document.createElement("p");
+		var btnPause = document.createElement("button");
+		var btnCont = document.createElement("button");
+		
+		pic.src = picsdir + "/" + fname;
+		pic.id = "bigPic";
+		pic.style.visibility = "hidden";
+		
+		ptot.id = "ptot";
+		addText(ptot, (parseInt(slide) + 1) + " of " + total);
+		
+		btnPause.id = "btnPause";
+		addText(btnPause, "pause");
+		btnPause.onclick = function()
+		{
+			divOut.removeChild(btnPause);
+			divOut.appendChild(btnCont);
+			clearTimeout(timer);
+		};
+		
+		btnCont.id = "btnCont";
+		addText(btnCont, "continue");
+		btnCont.onclick = function()
+		{
+			divOut.removeChild(btnCont);
+			divOut.appendChild(btnPause);
+			showNext(interval);
+		};
+
+		clearChilds(divOut);
+		divOut.appendChild(pic);
+		divOut.appendChild(ptot);
+		divOut.appendChild(btnPause);
+		
+		if (pic.complete)
+		{
+			resizePic(pic);
+			timer = setTimeout(function() {showNext(interval);}, interval);
+		}
+		else
+		{
+			pic.onload = function()
+			{
+				resizePic(pic);
+				timer = setTimeout(function() {showNext(interval);}, interval);
+			};
+		}
+	}
+	else if (slide == total && getQueryItem("repeat") == "yes")
+	{
+		slide = 0;
+		showNext(interval);
+		return false;
+	}
+	
+// 	if (slide == total - 1 && getQueryItem("repeat") != "yes")
+// 	{
+// 		divOut.removeChild(btnPause);
+// 		divOut.appendChild(btnCont);
+// 		slide = 0;
+// 		clearTimeout(timer);
+// 		return false;
+// 	}
+	
+	slide++;
+}
+
+function positionImageTable()
+{
+	var tbl = $("tblImages");
+	if (tbl.offsetHeight < document.body.clientHeight * .85)
+	{
+		tbl.style.marginTop = (document.body.clientHeight / 2 - tbl.offsetHeight / 2 - $("slideShowP").offsetHeight) + "px";
+	}
+	else tbl.style.marginTop = "0px";
+}
+
+function resizePic(pic)
+{
+	if (pic.offsetHeight > document.body.clientHeight * .85)
+	{
+		var r = pic.offsetHeight / (document.body.clientHeight * .85);
+		var h = (pic.offsetHeight / r);
+		var w = (pic.offsetWidth / r);
+		
+		pic.style.width = w + "px";
+		pic.style.height = h + "px";
+	}
+	
+	if (pic.offsetWidth > document.body.clientWidth * .85)
+	{
+		var r = pic.offsetWidth / (document.body.clientWidth * .85);
+		var h = (pic.offsetHeight / r);
+		var w = (pic.offsetWidth / r);
+		
+		pic.style.width = w + "px";
+		pic.style.height = h + "px";
+	}
+	pic.style.marginTop = ($("divOut").offsetHeight / 2 - pic.offsetHeight / 2 - $("ptot").offsetHeight / 2 - $("btnPause").offsetHeight) + "px";
+	pic.style.visibility = "visible";
+}
+
+function loadPics(xml)
+{
+	xmlDoc = xml;
+	var fnames = xmlDoc.getElementsByTagName("file");
+	var tbl = document.createElement("table");
+	var tbod = document.createElement("tbody");
+	var row = document.createElement("tr");
+	var slideShowLink = document.createElement("a");
+	var slideShowP = document.createElement("p");
+	
+	var divOut = $("divOut");
+	
+	clearChilds(divOut);
+	
+	tbl.id = "tblImages";
+	tbl.appendChild(tbod);
+	divOut.appendChild(tbl);
+	
+	slideShowLink.href = location.pathname + "?go=yes&start=0&interval=5000&repeat=no";
+	slideShowLink.title = "start the slideshow";
+	addText(slideShowLink, "slideshow");
+	
+	slideShowP.id = "slideShowP";
+	
+	slideShowP.appendChild(slideShowLink);
+	addBr(slideShowP, 2);
+	divOut.appendChild(slideShowP);
+	
+	for (var i = 0; i < fnames.length; i++)
+	{
+		var cell = document.createElement("td");
+		var a = document.createElement("a");
+		var fname = escape(fnames.item(i).firstChild.data);
+		var pic = new Image();
+		
+		a.href = picsdir + "/" + fname;
+		pic.src = picsdir + "/thumbs/" + fname;
+		
+		a.appendChild(pic);
+		cell.appendChild(a);
+		row.appendChild(cell);
+		
+		if ((i + 1) % 4 == 0)
+		{
+			tbod.appendChild(row);
+			row = document.createElement("tr");
+		}
+	}
+	
+	if (fnames.length % 4 != 0)
+	{
+		for (var i = 0; i < 4 - (fnames.length % 4); i++)
+		{
+			var cell = document.createElement("td");
+			addText(cell, "\u00a0");
+			row.appendChild(cell);
+		}
+		tbod.appendChild(row);
+	}
+	
+	//window.onresize = positionImageTable;
+	positionImageTable();
+}
+
+
+function getXml(callback)
+{
+	var xmlHttp;
+	
+	try
+	{
+		// Firefox, Opera 8.0+, Safari
+		xmlHttp = new XMLHttpRequest();
+	}
+	catch (e)
+	{
+		// Internet Explorer
+		try
+		{
+			xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+		}
+		catch (e)
+		{
+			try
+			{
+				xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			catch (e)
+			{
+				alert("Your browser does not support this script.");
+				return false;
+			}
+		}
+	}
+	
+	xmlHttp.onreadystatechange = function()
+	{
+		if (xmlHttp.readyState == 4)
+		{
+			callback(xmlHttp.responseXML);
+		}
+	}
+	xmlHttp.open("GET","pics/pics.xml",true);
+	xmlHttp.send(null);
+}
+
+/* ]]> */
+</script>
+</head>
+
+<body>
+	<div id="divOut"><p>Loading...</p></div>
+</body>
+
+</html>

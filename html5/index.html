@@ -1,0 +1,127 @@
+<?php require("../../log.php"); ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+<title></title>
+<script type="text/javascript" src="../jquery-1.6.4.min.js"></script>
+<style type="text/css">
+/* <![CDATA[ */
+body, .canvas { font: 6pt sans-serif; padding: 0; margin: 0; background: #FFFFFF; }
+/* ]]> */
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+
+var sounds = [
+    new Audio("wood1.ogg"),
+    new Audio("wood3.ogg"),
+    new Audio("wood2.ogg"),
+    new Audio("wood4.ogg")
+];
+
+$(function() {
+    var radius = 200;
+    var step = 15;
+    var pause = 20;
+
+    var $canvas = $("#canvas");
+    var ctx = $canvas[0].getContext("2d");
+
+    var timer;
+    var screen;
+
+    var dir = {
+        "up": false,
+        "left": false
+    };
+
+    var pos = {
+        "x": radius - step + 1,
+        "y": radius - step + 1
+    };
+
+    function playAudio(index) {
+        var sound = sounds[index];
+        if (sound.readyState >= 2) {
+            sound.pause();
+            sound.currentTime = 0;
+            sound.play();
+        }
+    }
+
+    function draw() {
+        clearTimeout(timer);
+
+        ctx.clearRect(pos.x - radius - 1, pos.y - radius - 1, radius * 2 + 2, radius * 2 + 2);
+
+        if (dir.left && pos.x < radius + step) {
+            dir.left = false;
+            playAudio(0);
+        } else if (pos.x + radius + step > screen.width) {
+            dir.left = true;
+            playAudio(1);
+        }
+
+        if (dir.up && pos.y < radius + step) {
+            dir.up = false;
+            playAudio(2);
+        } else if (pos.y + radius + step > screen.height) {
+            dir.up = true;
+            playAudio(3);
+        }
+
+        if (dir.left)
+            pos.x -= step;
+        else
+            pos.x += step;
+
+        if (dir.up)
+            pos.y -= step;
+        else
+            pos.y += step;
+
+        ctx.fillStyle = ctx.createRadialGradient(pos.x, pos.y, radius / Math.PI, pos.x, pos.y, radius);
+        ctx.fillStyle.addColorStop(0, "#E00000");
+        ctx.fillStyle.addColorStop(1, "#A00000");
+
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, radius, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        timer = setTimeout(draw, pause);
+    };
+
+    $canvas.mousedown(function() {
+        clearTimeout(timer);
+    }).mouseup(function() {
+        draw();
+    }).mouseout(function() {
+        draw();
+    });
+
+    $(window).resize(function() {
+        screen = {
+            "width": innerWidth - 1,
+            "height": innerHeight - 2
+        };
+        $canvas.prop("height", screen.height);
+        $canvas.prop("width", screen.width);
+    }).resize();
+
+    draw();
+});
+
+
+/* ]]> */
+</script>
+
+</head>
+<body>
+<div class="canvas">
+    <canvas id="canvas"></canvas>
+</div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<?php require("../../log.php"); ?>
+<?php echo '<?xml version="1.0" encoding="utf-8"?>'."\n"; ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<link type="text/css" rel="stylesheet" href="../jquery-ui/css/theme/jquery-ui-1.8.16.custom.css" />
+<link type="text/css" rel="stylesheet" href="dataview.jquery.css" />
+<script type="text/javascript" src="../jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="../jquery-ui/js/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="dataview.jquery.js"></script>
+<style type="text/css">
+/* <![CDATA[ */
+body { font: 6pt sans-serif; padding: 0; margin: 10px; }
+.ui-widget-content { background: #000000 url(images/ui-bg_mine.png) repeat; }
+.dataview-browser-content { font-size: 1.2em; height: 200px;}
+#countries { margin: 50px auto; }
+/* ]]> */
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+$(function() {
+    $("#countries").dataview({
+        "caption": "Countries",
+        "url": "data.php",
+        "data": { "set": "countries" },
+        "limit": 25,
+        "columnVisibilities": [ false, false, true, true, true, true, false ],
+        "sortColumn1": 3,
+        "sortColumn2": 5,
+        "wrap": false,
+        "rowHover": true
+    }).dataviewBrowser({ "titleColumn": 1, "contentColumn": 6 });
+});
+/* ]]> */
+</script>
+
+</head>
+
+<body>
+    <div id="countries"></div>
+</body>
+</html>

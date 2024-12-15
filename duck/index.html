@@ -1,0 +1,50 @@
+<?php require("../../log.php"); ?>
+<?php echo '<?xml version="1.0" encoding="utf-8"?>'."\n"; ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="application/xml; charset=utf-8" />
+<script type="text/javascript" src="../jquery-1.5.1.min.js"></script>
+<style type="text/css">
+/* <![CDATA[ */
+
+html, body { padding: 0; margin: 0; }
+body { background-color: #112233; color: white; font-family: monospace; font-size: 8pt; }
+a { color: #445566; }
+a { text-decoration: none; font-weight: bold; }
+a:hover { text-decoration: underline; color: #778899; }
+
+#bigDiv { padding: 0; margin: 0; text-align: center; }
+
+#hello { display: none; padding-top: 200px; }
+
+/* ]]> */
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+
+$(function() {
+    $("#hello").prepend('<img id="duck" src="duckman2.gif" alt="" />');
+    setTimeout( function() {
+        $("#hello").fadeIn(10000, function() {
+            $("#hello").fadeOut(5000);
+        });
+    }, 10000);
+});
+
+/* ]]> */
+</script>
+
+</head>
+
+<body>
+    <div id="bigDiv">
+        <div id="hello">
+            <p>What the hell're YOU staring at?</p>
+        </div>
+    </div>
+</body>
+
+</html>

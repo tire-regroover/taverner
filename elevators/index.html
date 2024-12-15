@@ -1,0 +1,128 @@
+<?php require("../../log.php"); ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<title></title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<!--
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
+<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/vader/jquery-ui.css" />
+-->
+
+<style type="text/css">
+/* <![CDATA[ */
+body { font:10px sans-serif; background:#ffffff; color:#000000; text-align:center; }
+table { float:left; margin:10px 3px; border-collapse:collapse; }
+table, td { border:1px solid #000000; padding:0; }
+table.elevator { margin-left: 10px; }
+table.buttons { margin-right: 10px; }
+table.elevator td { height:41px; width:30px; }
+table.elevator td.present { background:#c0c0c0 }
+table.elevator td.button { height:20px; width:30px; cursor:pointer; background:#ffffff; }
+table.elevator td.button:hover { background:#c0c0c0; }
+#div_output { display:block; float:left; margin: 0 0 0 30px; text-align:left; }
+/* ]]> */
+</style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+
+$(function() {
+    var total_shafts = 4;
+    var total_floors = 10;
+    
+    //don't use stop
+    var states = { "STOP": 0, "UP": 1, "DOWN": 2 };
+    
+    var $building = $("#div_building");
+    var $output = $("#div_output");
+    
+    for (var s = 0; s < total_shafts; s++) {
+        var $table_elevator = $('<table class="elevator" />');
+        $building.append($table_elevator);
+        $table_elevator.data("floor", 0);
+        $table_elevator.data("dests", Array());
+        
+        for (var f = 0; f < total_floors; f++) {
+            var $car = $('<td rowspan="2" class="car">' + String(f) + '</td>');
+            if (f == 0) {
+                $car.addClass("present");
+            }
+            
+            var $up = $('<td class="button">&uarr;</td>');
+            var $down = $('<td class="button">&darr;</td>');
+            
+            $table_elevator.append($('<tr></tr>').append($car).append($up));
+            
+            $table_elevator.append($('<tr></tr>').append($down));
+            
+            (function(shaft, floor) {
+                $up.click(function() {
+                    button_push(shaft, floor, states.UP);
+                });
+                $down.click(function() {
+                    button_push(shaft, floor, states.DOWN);
+                });
+            })(s, f);
+        }
+    }
+    
+    function button_push(shaft, dest, dir) {
+        $output.append("<p>button pushed, shaft: " + shaft + ", floor: " + dest + ", dir: " + dir + "</p>");
+        
+        var $elevator = $("#div_building table.elevator").eq(shaft);
+        var dests = $elevator.data("dests")
+        
+        if (dests.length == 0) {
+            dests.push(dest);
+            
+            var floor = Number($elevator.data("floor"));
+            if (floor != dest) {
+                setTimeout(move(shaft), 1000);
+            } 
+        } else {
+            
+        }
+    }
+    
+    function move(shaft) {
+        var $elevator = $("#div_building table.elevator").eq(shaft);
+        var floor = $elevator.data("floor");
+        
+        $("td.present", $("#div_building table.elevator").eq(shaft)).removeClass("present");
+        $("td.car", $("#div_building table.elevator").eq(shaft)).eq(floor).addClass("present");
+        
+        var dest = $elevator.data("dests")[0];
+        if (dest > floor) {
+            $elevator.data("floor", ++floor);
+            setTimeout(function() { move(shaft) }, 1000);
+        } else if (dest < floor) {
+            $elevator.data("floor", --floor);
+            setTimeout(function() { move(shaft) }, 1000);
+        } else {
+            arrived(shaft);
+        }
+    }
+    
+    function arrived(shaft) {
+        var $elevator = $("#div_building table.elevator").eq(shaft);
+        var floor = $elevator.data("floor")
+        $output.append("<p>arrived, shaft: " + shaft + ", floor: " + floor + "</p>");
+        
+        $elevator.data("dests").shift(); // not right!
+    }
+});
+
+/* ]]> */
+</script>
+
+<body>
+
+<div id="div_building"></div>
+
+<div id="div_output"></div>
+
+</body>
+
+</html>

@@ -1,0 +1,325 @@
+.dataview-offscreen {
+    position: fixed;
+    top: -99999px;
+    left: -99999px;
+}
+
+.dataview input {
+    background-color: #fff;
+}
+
+.dataview input, .dataview select {
+    color: #000;
+}
+
+div.dataview-container {
+    overflow: hidden;
+}
+
+div.dataview-container h2 {
+    margin: 0 0 3px 0;
+    padding: 0;
+    text-align: center;
+    font-size: 110%;
+    font-weight: 110;
+    letter-spacing: 0.15ex;
+}
+
+div.dataview-container table {
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+div.dataview-head-table-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.dataview-head-table {
+    position: relative;
+}
+
+.dataview-head-table th {
+}
+
+.dataview-head-table th div.dataview-header-content {
+    padding: 2px 16px 3px 16px;
+    overflow: hidden;
+    float: left;
+    cursor: pointer;
+}
+
+.dataview-header-drag {
+}
+
+.dataview-indicator {
+    position: absolute;
+    display: block;
+    top: 1px;
+}
+
+div.dataview-body-table-container {
+    overflow: auto;
+    border-top: none;
+}
+
+.dataview-body-table {
+}
+
+.dataview-body-table td {
+    background: none;
+}
+
+.dataview-body-table td div {
+    padding: 2px 6px 4px 6px;
+    overflow: hidden;
+}
+
+.dataview-body-table .dataview-odd {
+    background: rgb(0, 0, 0) transparent;
+    background: rgba(0, 0, 0, 0.4);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#77000000, endColorstr=#77000000);
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#77000000, endColorstr=#77000000)";
+}
+
+.dataview-singleline {
+    white-space: nowrap;
+}
+
+.dataview-body-table td.dataview-string {
+    text-align: left;
+}
+
+.dataview-body-table td.dataview-number {
+    text-align: right;
+}
+
+.dataview-foot {
+    margin: 4px 0 0 0;
+}
+
+.dataview-foot input {
+    border: none;
+    border-radius: 3px;
+    height: 14px;
+    margin:0;
+}
+
+.dataview-foot a {
+    height: 17px;
+    width: 17px;
+}
+
+.dataview-search-controls {
+    margin: -1px 0 0 0;
+    padding: 3px 8px 3px 8px;
+    float: right;
+    clear: both;
+    white-space: nowrap;
+}
+
+.dataview-textbox-search {
+    width: 110px;
+    padding: 1px 16px 1px 2px;
+}
+
+.dataview-search-button {
+    background: url(images/search.png) no-repeat;
+    display: inline-block;
+    position: relative;
+    top: 5px;
+    margin: -16px 0 0 -16px;
+}
+
+.dataview-select-fields {
+    margin: 0 0 0 4px;
+}
+
+.dataview-search-controls-input {
+    float: left;
+    display: inline-block;
+    padding: 0 0 0 4px;
+}
+
+.dataview-search-controls-buttons {
+    margin: 0 6px 0 0;
+    float: right;
+    display: inline-block;
+}
+
+.dataview-search-controls ul {
+    margin: 0 0 0 4px;
+    padding: 0;
+    float: left;
+}
+
+.dataview-search-controls ul li {
+    margin:0;
+    padding: 0;
+    float: left;
+    list-style: none;
+}
+
+.dataview-search-controls ul a {
+    margin: 0 0 0 2px;
+    padding: 0;
+    float: left;
+}
+
+.dataview-page-controls {
+    margin: -1px 0 0 0;
+    padding: 3px 8px 3px 8px;
+    float: right;
+    clear: both;
+    white-space: nowrap;
+}
+
+.dataview-page-controls-input {
+    float: left;
+    display: inline-block;
+    margin: 1px 0 -1px 0;
+}
+
+.dataview-textbox-page {
+    width: 50px;
+    padding: 0 2px;
+}
+
+.dataview-pages {
+    display: inline-block;
+    margin: 0 0 0 3px;
+}
+
+.dataview-page-controls-buttons {
+    margin: 0;
+    float: right;
+    display: inline-block;
+}
+
+.dataview-page-controls ul {
+    margin: 0 6px 0 0;
+    padding: 0;
+    float: left;
+}
+
+.dataview-page-controls ul li {
+    margin:0;
+    padding: 0;
+    float: left;
+    list-style: none;
+}
+
+.dataview-page-controls ul a {
+    margin: 0 0 0 2px;
+    padding: 0;
+    float: left;
+}
+
+.dataview-page-controls ul a.dataview-config-button {
+    margin: 0 0 0 8px;
+}
+
+.dataview-dialog-content {
+    background: rgb(0, 0, 0) transparent;
+    background: rgba(0, 0, 0, 0.5);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#88000000, endColorstr=#88000000);
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#88000000, endColorstr=#88000000)";
+    border: 1px solid #555555;
+    padding: 10px;
+}
+
+.dataview-dialog-columns {
+    margin: 4px auto;
+}
+
+.dataview-config-dialog {
+}
+
+.dataview-config-dialog ul {
+    margin:0;
+    padding: 0;
+}
+
+.dataview-config-dialog ul li {
+    margin:0;
+    padding: 0;
+    list-style: none;
+}
+
+.dataview-config-dialog ul li label {
+    cursor: pointer;
+}
+
+.dataview-select-limit {
+}
+
+.dataview-limits {
+    margin: 4px auto;
+    white-space: nowrap;
+}
+
+.dataview-autowidths {
+    margin: 4px auto 0 auto;
+    white-space: nowrap;
+}
+
+.borderless-top {
+    border-top: none;
+}
+
+.borderless-right {
+    border-right: none;
+}
+
+.borderless-bottom {
+    border-bottom: none;
+}
+
+.borderless-left {
+    border-left: none;
+}
+
+.dataview-splash {
+/*     position: fixed; */
+    text-align: center;
+    background: url(images/loading.gif) no-repeat bottom center;
+    height: 40px;
+}
+
+
+
+.dataview-browser {
+}
+
+.dataview-browser-content {
+    white-space: pre-wrap;
+    height: 450px;
+    width: 500px;
+    overflow-y: scroll;
+}
+
+ul.dataview-browser-buttons,
+ul.dataview-browser-buttons li { list-style: none; padding: 0 }
+ul.dataview-browser-buttons { float: right; margin: 0 6px; }
+ul.dataview-browser-buttons li { float: left; margin: 0; }
+ul.dataview-browser-buttons li a { margin: 4px; }
+
+.dataview .dataview-highlight { font-weight: bold; }
+
+
+/* jquery ui hacks: */
+.dataview .ui-icon-trash { background-position: -176px -96px; }
+.dataview .ui-icon-document { background-position: -31px -96px; }
+.dataview .ui-icon-plus { background-position: -16px -128px; }
+.dataview .ui-icon-minus { background-position: -48px -128px; }
+.dataview .ui-icon-refresh { background-position: -64px -80px; }
+.dataview .ui-icon-seek-next { background-position: -32px -160px; }
+.dataview .ui-icon-seek-prev { background-position: -48px -160px; }
+.dataview .ui-icon-seek-end { background-position: -64px -160px; }
+.dataview .ui-icon-seek-start { background-position: -80px -160px; }
+.dataview .ui-icon-newwin { background-position: -48px -80px; }
+.dataview .ui-icon-wrench { background-position: -176px -112px; }
+.dataview-body-table .ui-state-hover a,
+.dataview-body-table .ui-state-active a { text-decoration: underline; }
+.dataview-body-table .ui-state-hover,
+.dataview-body-table .ui-state-active { border: none; padding: 1px; }
