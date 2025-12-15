@@ -1,4 +1,3 @@
-<?php require("../../log.php"); ?>
 <?php echo '<?xml version="1.0" encoding="utf-8"?>'."\n"; ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -153,7 +152,7 @@ $(function() {
             for (var x = 0; x < SIZE; x++) {
                 $cell = $("#cell" + x + "-" + y);
                 val = $cell.attr("value");
-                if (checkSpot(val, [ x, y ])) {
+                if (checkSpot([ x, y ], val)) {
                     $cell.removeClass("enabled");
                     $cell.addClass("disabled");
                     $cell.attr("readonly", "readonly");
@@ -237,7 +236,7 @@ function getSpotList() {
     return spotList;
 }
 
-function checkSpot(val, spot) {
+function checkSpot(spot, val) {
     if (!String(val).match(/^[1-9]$/)) return false;
     var $cell, sector;
     for (var x = 0; x < SIZE; x++) {
@@ -272,7 +271,7 @@ function solveBrute() {
         $cell = $("#cell" + spot[0] + "-" + spot[1]);
         found = false;
         for (var i = back; i <= SIZE && !found; i++) {
-            if (checkSpot(i, spot)) {
+            if (checkSpot(spot, i)) {
                 $cell.attr("value", i);
                 back = 1;
                 found = true;
@@ -288,7 +287,7 @@ function solveBrute() {
             s--;
         }
     }
-    return true;
+    return checkSudoku();
 }
 
 function checkSudoku() {
@@ -297,7 +296,7 @@ function checkSudoku() {
         for (var x = 0; x < SIZE; x++) {
             $cell = $("#cell" + x + "-" + y);
             val = $cell.attr("value");
-            if (!checkSpot(val, [ x, y ]))
+            if (!checkSpot([ x, y ], val))
                 return false;
         }
     }
